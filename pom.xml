@@ -56,21 +56,16 @@
 		<!-- =================================== BANCO DE DADOS =================================== -->
 
 		<dependency>
-			<groupId>postgresql</groupId>
+			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.0-801.jdbc4</version>
+			<version>42.2.1</version>
 		</dependency>
 
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>2.2</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>${commons-dbcp2.version}</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- =================================== LOMBOK =================================== -->

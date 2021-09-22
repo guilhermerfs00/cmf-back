@@ -6,6 +6,7 @@ import com.puc.cmfback.model.mapper.UsuarioMapper;
 import com.puc.cmfback.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,15 +24,6 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository repository;
 
-    public UsuarioDTO buscarUsuarioPorId(Long id) {
-        var usuario = repository.findById(id);
-
-        if (isNull(usuario)) {
-            throw new UsuarioException("Usuario não encontrado", NOT_FOUND);
-        }
-        return UsuarioMapper.entityToDto(usuario.get());
-    }
-
     public UsuarioDTO buscarUsuarioPorEmail(String email) {
         var usuario = repository.findByEmail(email).get();
 
@@ -39,18 +31,6 @@ public class UsuarioService {
             throw new UsuarioException("Email não encontrado", NOT_FOUND);
         }
         return UsuarioMapper.entityToDto(usuario);
-    }
-
-    public void criarUsuario(UsuarioDTO usuarioDTO) {
-        try {
-            validarEmailJaExistente(usuarioDTO.getEmail());
-
-            var usuario = UsuarioMapper.dtoToEntity(usuarioDTO);
-
-            repository.save(usuario);
-        } catch (Exception e) {
-            throw new UsuarioException("Erro ao salvar usuario", BAD_REQUEST);
-        }
     }
 
     public void deletarUsuarioPorEmail(String email) {
@@ -67,10 +47,10 @@ public class UsuarioService {
         }
     }
 
-    public void atualizarUsuario(UsuarioDTO usuarioDTO, Long id) {
+    public void atualizarUsuario(UsuarioDTO usuarioDTO) {
         try {
             var usuario = UsuarioMapper.dtoToEntity(usuarioDTO);
-            usuario.setId(id);
+            usuario.setEmail(usuario.getEmail());
 
             repository.save(usuario);
         } catch (Exception e) {
@@ -83,5 +63,18 @@ public class UsuarioService {
 
         if (isNull(usuario))
             throw new UsuarioException("Usuario nao encontrado", NOT_FOUND);
+    }
+
+    public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
+        try {
+            validarEmailJaExistente(usuarioDTO.getEmail());
+
+            var usuario = UsuarioMapper.dtoToEntity(usuarioDTO);
+            usuario = repository.save(usuario);
+
+            return UsuarioMapper.entityToDto(usuario);
+        } catch (Exception e) {
+            throw new UsuarioException("Erro ao salvar usuario: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

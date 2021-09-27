@@ -79,12 +79,12 @@ public class UsuarioService {
         }
     }
 
-    public boolean login(LoginDTO loginDTO) {
-        var usuario = repository.findByEmail(loginDTO.getEmail()).get();
+    public boolean login(String email, String senha) {
+        var usuario = repository.findByEmail(email).get();
 
         if (isNull(usuario))
             throw new UsuarioException("Usuario nao encontrado", NOT_FOUND);
 
-        return usuario.getSenha() == loginDTO.getSenha();
+        return usuario.getSenha().equals(senha);
     }
 }

@@ -49,8 +49,8 @@ public class UsuarioController {
     }
 
     @GetMapping(value = "/login")
-    public ResponseEntity<Boolean> login(@RequestBody LoginDTO loginDTO) {
-        var resposta = usuarioService.login(loginDTO);
+    public ResponseEntity<Boolean> login(@RequestHeader String email, @RequestHeader String senha) {
+        var resposta = usuarioService.login(email, senha);
         return ResponseEntity.ok().body(resposta);
     }
 }

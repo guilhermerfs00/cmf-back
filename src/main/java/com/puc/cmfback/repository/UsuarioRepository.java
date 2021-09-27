@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     Optional<Usuario> findByEmail(String email);
 
     @Transactional

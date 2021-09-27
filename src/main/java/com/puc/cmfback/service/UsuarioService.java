@@ -1,6 +1,7 @@
 package com.puc.cmfback.service;
 
 import com.puc.cmfback.exception.errors.UsuarioException;
+import com.puc.cmfback.model.dto.LoginDTO;
 import com.puc.cmfback.model.dto.UsuarioDTO;
 import com.puc.cmfback.model.mapper.UsuarioMapper;
 import com.puc.cmfback.repository.UsuarioRepository;
@@ -76,5 +77,14 @@ public class UsuarioService {
         } catch (Exception e) {
             throw new UsuarioException("Erro ao salvar usuario: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public boolean login(LoginDTO loginDTO) {
+        var usuario = repository.findByEmail(loginDTO.getEmail()).get();
+
+        if (isNull(usuario))
+            throw new UsuarioException("Usuario nao encontrado", NOT_FOUND);
+
+        return usuario.getSenha() == loginDTO.getSenha();
     }
 }

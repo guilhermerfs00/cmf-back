@@ -1,5 +1,6 @@
 package com.puc.cmfback.controller;
 
+import com.puc.cmfback.model.dto.LoginDTO;
 import com.puc.cmfback.model.dto.UsuarioDTO;
 import com.puc.cmfback.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,11 @@ public class UsuarioController {
     public ResponseEntity.BodyBuilder deletarUsuarioPorId(@RequestParam String email) {
         usuarioService.deletarUsuarioPorEmail(email);
         return ResponseEntity.ok();
+    }
+
+    @GetMapping(value = "/login")
+    public ResponseEntity<Boolean> login(@RequestBody LoginDTO loginDTO) {
+        var resposta = usuarioService.login(loginDTO);
+        return ResponseEntity.ok().body(resposta);
     }
 }

@@ -14,6 +14,8 @@ import java.util.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Usuario {
 
     @Id

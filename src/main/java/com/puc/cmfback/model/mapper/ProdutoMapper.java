@@ -1,28 +1,16 @@
 package com.puc.cmfback.model.mapper;
 
 import com.puc.cmfback.model.dto.ProdutoDTO;
-import com.puc.cmfback.model.dto.UsuarioDTO;
 import com.puc.cmfback.model.entity.Produto;
-import com.puc.cmfback.model.entity.Usuario;
-import org.springframework.beans.BeanUtils;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import static java.util.Objects.isNull;
+@Mapper
+public interface ProdutoMapper {
 
-public class ProdutoMapper {
+    ProdutoMapper INSTANCE = Mappers.getMapper(ProdutoMapper.class);
 
-    public static ProdutoDTO entityToDto(Produto produto) {
-        ProdutoDTO produtoDTO = new ProdutoDTO();
-        if (!isNull(produto)) {
-            BeanUtils.copyProperties(produto, produtoDTO);
-        }
-        return produtoDTO;
-    }
+    ProdutoDTO entityToDto(Produto produto);
 
-    public static Produto dtoToEntity(ProdutoDTO produtoDTO) {
-        Produto produto = new Produto();
-        if (!isNull(produtoDTO)) {
-            BeanUtils.copyProperties(produtoDTO, produto);
-        }
-        return produto;
-    }
+    Produto dtoToEntity(ProdutoDTO produto);
 }

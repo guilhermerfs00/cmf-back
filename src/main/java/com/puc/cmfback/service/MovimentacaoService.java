@@ -19,9 +19,9 @@ public class MovimentacaoService {
 
     public MovimentacaoDTO criarMovimentacao(MovimentacaoDTO movimentacaoDTO) {
         try {
-            var movimentacao = MovimentacaoMapper.dtoToEntity(movimentacaoDTO);
+            var movimentacao = MovimentacaoMapper.INSTANCE.dtoToEntity(movimentacaoDTO);
             movimentacao = repository.save(movimentacao);
-            return MovimentacaoMapper.entityToDto(movimentacao);
+            return MovimentacaoMapper.INSTANCE.entityToDto(movimentacao);
         } catch (Exception e) {
             throw new UsuarioException("Erro ao salvar produto: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }

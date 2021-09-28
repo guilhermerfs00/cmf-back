@@ -2,27 +2,21 @@ package com.puc.cmfback.model.mapper;
 
 import com.puc.cmfback.model.dto.MovimentacaoDTO;
 import com.puc.cmfback.model.dto.ProdutoDTO;
+import com.puc.cmfback.model.dto.UsuarioDTO;
 import com.puc.cmfback.model.entity.Movimentacao;
 import com.puc.cmfback.model.entity.Produto;
+import com.puc.cmfback.model.entity.Usuario;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.BeanUtils;
 
 import static java.util.Objects.isNull;
 
-public class MovimentacaoMapper {
+@Mapper
+public interface MovimentacaoMapper {
+    MovimentacaoMapper INSTANCE = Mappers.getMapper(MovimentacaoMapper.class);
 
-    public static MovimentacaoDTO entityToDto(Movimentacao movimentacao) {
-        MovimentacaoDTO movimentacaoDTO = new MovimentacaoDTO();
-        if (!isNull(movimentacao)) {
-            BeanUtils.copyProperties(movimentacao, movimentacaoDTO);
-        }
-        return movimentacaoDTO;
-    }
+    MovimentacaoDTO entityToDto(Movimentacao movimentacao);
 
-    public static Movimentacao dtoToEntity(MovimentacaoDTO movimentacaoDTO) {
-        Movimentacao movimentacao = new Movimentacao();
-        if (!isNull(movimentacaoDTO)) {
-            BeanUtils.copyProperties(movimentacaoDTO, movimentacao);
-        }
-        return movimentacao;
-    }
+    Movimentacao dtoToEntity(MovimentacaoDTO movimentacaoDTO);
 }

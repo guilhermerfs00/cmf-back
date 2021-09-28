@@ -31,7 +31,7 @@ public class UsuarioService {
         if (isNull(usuario)) {
             throw new UsuarioException("Email não encontrado", NOT_FOUND);
         }
-        return UsuarioMapper.entityToDto(usuario);
+        return UsuarioMapper.INSTANCE.entityToDto(usuario);
     }
 
     public void deletarUsuarioPorEmail(String email) {
@@ -42,7 +42,7 @@ public class UsuarioService {
         try {
             var usuarios = repository.findAll();
 
-            return usuarios.stream().map(UsuarioMapper::entityToDto).collect(toList());
+            return usuarios.stream().map(UsuarioMapper.INSTANCE::entityToDto).collect(toList());
         } catch (Exception e) {
             throw new UsuarioException("Erro ao buscar todos os usuários", NOT_FOUND);
         }
@@ -50,7 +50,7 @@ public class UsuarioService {
 
     public void atualizarUsuario(UsuarioDTO usuarioDTO) {
         try {
-            var usuario = UsuarioMapper.dtoToEntity(usuarioDTO);
+            var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
             usuario.setEmail(usuario.getEmail());
 
             repository.save(usuario);
@@ -70,10 +70,10 @@ public class UsuarioService {
         try {
             validarEmailJaExistente(usuarioDTO.getEmail());
 
-            var usuario = UsuarioMapper.dtoToEntity(usuarioDTO);
+            var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
             usuario = repository.save(usuario);
 
-            return UsuarioMapper.entityToDto(usuario);
+            return UsuarioMapper.INSTANCE.entityToDto(usuario);
         } catch (Exception e) {
             throw new UsuarioException("Erro ao salvar usuario: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }

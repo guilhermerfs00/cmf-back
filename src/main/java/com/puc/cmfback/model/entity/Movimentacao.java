@@ -18,7 +18,8 @@ import java.math.BigDecimal;
 public class Movimentacao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idMovimentacao", unique = true, nullable = false)
     private Long idMovimentacao;
 
     private BigDecimal valor;

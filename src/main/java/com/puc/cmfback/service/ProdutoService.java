@@ -30,9 +30,9 @@ public class ProdutoService {
 
     public ProdutoDTO criarProduto(ProdutoDTO produtoDTO) {
         try {
-            var produto = ProdutoMapper.dtoToEntity(produtoDTO);
+            var produto = ProdutoMapper.INSTANCE.dtoToEntity(produtoDTO);
             produto = repository.save(produto);
-            return ProdutoMapper.entityToDto(produto);
+            return ProdutoMapper.INSTANCE.entityToDto(produto);
         } catch (Exception e) {
             throw new UsuarioException("Erro ao salvar produto: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }

@@ -20,8 +20,7 @@ import java.util.Set;
 public class Produto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idProduto;
+    private Integer idProduto;
 
     private String nome;
 
@@ -30,6 +29,4 @@ public class Produto {
     @JsonManagedReference
     @OneToMany(mappedBy = "produto", targetEntity = Movimentacao.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Movimentacao> movimentacao = new HashSet<>();
-
-
 }

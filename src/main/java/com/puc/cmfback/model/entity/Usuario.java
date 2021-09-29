@@ -19,6 +19,8 @@ import java.util.*;
 public class Usuario {
 
     @Id
+    private Integer idUsuario;
+
     private String email;
 
     private String nome;
@@ -28,11 +30,4 @@ public class Usuario {
     @JsonManagedReference
     @OneToMany(mappedBy = "usuario", targetEntity = Movimentacao.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Movimentacao> movimentacao = new HashSet<>();
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dataCriacao;
-
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dataAtualizacao;
 }

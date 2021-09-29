@@ -1,6 +1,5 @@
 package com.puc.cmfback.controller;
 
-import com.puc.cmfback.model.dto.LoginDTO;
 import com.puc.cmfback.model.dto.UsuarioDTO;
 import com.puc.cmfback.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,41 +15,41 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioService service;
 
-    @GetMapping
+    @GetMapping(value = "/buscar-por-email/{email}")
     public ResponseEntity<UsuarioDTO> buscarUsuarioPorEmail(@RequestParam String email) {
-        var resposta = usuarioService.buscarUsuarioPorEmail(email);
+        var resposta = service.buscarUsuarioPorEmail(email);
         return ResponseEntity.ok().body(resposta);
     }
 
     @GetMapping(value = "/buscar-todos")
     public ResponseEntity<List<UsuarioDTO>> buscarTodosOsUsuarios() {
-        var resposta = usuarioService.buscarTodosOsUsuarios();
+        var resposta = service.buscarTodosOsUsuarios();
         return ResponseEntity.ok().body(resposta);
     }
 
-    @PostMapping(value = "cadastrar")
+    @PostMapping(value = "/cadastrar")
     public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        var resposta = usuarioService.criarUsuario(usuarioDTO);
+        var resposta = service.criarUsuario(usuarioDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
-    @PutMapping
+    @PutMapping(value = "/atualizar")
     public ResponseEntity<UsuarioDTO> atualizarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        usuarioService.atualizarUsuario(usuarioDTO);
+        service.atualizarUsuario(usuarioDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioDTO);
     }
 
-    @DeleteMapping(value = "/{email}")
+    @DeleteMapping(value = "/deletar/{email}")
     public ResponseEntity.BodyBuilder deletarUsuarioPorId(@RequestParam String email) {
-        usuarioService.deletarUsuarioPorEmail(email);
+        service.deletarUsuarioPorEmail(email);
         return ResponseEntity.ok();
     }
 
     @GetMapping(value = "/login")
     public ResponseEntity<Boolean> login(@RequestHeader String email, @RequestHeader String senha) {
-        var resposta = usuarioService.login(email, senha);
+        var resposta = service.login(email, senha);
         return ResponseEntity.ok().body(resposta);
     }
 }

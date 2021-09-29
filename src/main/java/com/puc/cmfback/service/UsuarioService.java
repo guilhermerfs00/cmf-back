@@ -26,6 +26,7 @@ public class UsuarioService {
     private UsuarioRepository repository;
 
     public UsuarioDTO buscarUsuarioPorEmail(String email) {
+
         var usuario = repository.findByEmail(email).get();
 
         if (isNull(usuario)) {
@@ -51,9 +52,8 @@ public class UsuarioService {
     public void atualizarUsuario(UsuarioDTO usuarioDTO) {
         try {
             var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
-            usuario.setEmail(usuario.getEmail());
 
-            repository.save(usuario);
+            repository.atualizarUsuario(usuario.getEmail(), usuario.getNome(), usuario.getSenha());
         } catch (Exception e) {
             throw new UsuarioException("Erro ao atualizar usuario", BAD_REQUEST);
         }
@@ -71,9 +71,9 @@ public class UsuarioService {
             validarEmailJaExistente(usuarioDTO.getEmail());
 
             var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
-            usuario = repository.save(usuario);
+            repository.criarUsuario(usuario.getEmail(), usuario.getNome(), usuario.getSenha());
 
-            return UsuarioMapper.INSTANCE.entityToDto(usuario);
+            return usuarioDTO;
         } catch (Exception e) {
             throw new UsuarioException("Erro ao salvar usuario: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }

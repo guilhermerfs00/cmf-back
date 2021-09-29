@@ -25,8 +25,4 @@ public class Produto {
     private String nome;
 
     private Integer quantidade;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "produto", targetEntity = Movimentacao.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Movimentacao> movimentacao = new HashSet<>();
 }

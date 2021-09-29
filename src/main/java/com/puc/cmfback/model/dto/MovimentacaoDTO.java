@@ -17,13 +17,9 @@ import java.math.BigDecimal;
 public class MovimentacaoDTO {
 
     private OrdemEnum ordem;
-
     private TipoMovimentacaoEnum tipoMovimentacao;
-
     private BigDecimal valor;
-
-    private Long idUsuario;
-
-    private Long IdProduto;
+    private Integer idUsuario;
+    private Integer IdProduto;
 
 }

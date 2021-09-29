@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Table(name = "movimentacao")
 @Entity
@@ -18,7 +21,8 @@ import java.math.BigDecimal;
 public class Movimentacao {
 
     @Id
-    private Long idMovimentacao;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idMovimentacao;
 
     private BigDecimal valor;
 
@@ -26,13 +30,15 @@ public class Movimentacao {
 
     private String ordem;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_produto", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Produto produto;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Usuario usuario;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "id_produto")
-    private Produto produto;
+    private LocalDate dataCriacao;
 }

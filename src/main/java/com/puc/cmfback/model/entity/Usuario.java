@@ -26,8 +26,4 @@ public class Usuario {
     private String nome;
 
     private String senha;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "usuario", targetEntity = Movimentacao.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Movimentacao> movimentacao = new HashSet<>();
 }

@@ -31,6 +31,12 @@ public class ProdutoController {
         return ResponseEntity.ok().body(resposta);
     }
 
+    @GetMapping(value = "/buscar-por-nome/{nome}")
+    public ResponseEntity<List<ProdutoDTO>> buscarProdutosProNome(@RequestParam String nome) {
+        var resposta = service.buscarProdutoPorNome(nome);
+        return ResponseEntity.ok().body(resposta);
+    }
+
     @PostMapping(value = "/cadastrar")
     public ResponseEntity<ProdutoDTO> criarProduto(@RequestBody ProdutoDTO produtoDTO) {
         var resposta = service.criarProduto(produtoDTO);

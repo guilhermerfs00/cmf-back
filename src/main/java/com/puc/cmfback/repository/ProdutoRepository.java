@@ -10,18 +10,19 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
+    Produto findByNome(String nome);
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO Produto (nome, quantidade) VALUES (:nome, :quantidade)", nativeQuery = true)
-    void criarProduto(@Param("nome") String nome, @Param("quantidade") Integer quantidade);
+    Integer criarProduto(@Param("nome") String nome, @Param("quantidade") Integer quantidade);
 
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE Produto p SET nome =:nome, quantidade=:quantidade WHERE p.idProduto = :idProduto", nativeQuery = true)
-    void atualizarProduto(@Param("idProduto") Integer idProduto, @Param("nome") String nome, @Param("quantidade") Integer quantidade);
+
+    List<Produto> findByNomeStartingWith(String nome);
 }

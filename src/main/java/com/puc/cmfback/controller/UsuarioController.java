@@ -52,7 +52,7 @@ public class UsuarioController {
         return ResponseEntity.ok();
     }
 
-    @GetMapping(value = "/login")
+    @PostMapping(value = "/login")
     @CrossOrigin(origins = "http://localhost:8100")
     public ResponseEntity<Boolean> login(@RequestHeader String email, @RequestHeader String senha) {
         var resposta = service.login(email, senha);

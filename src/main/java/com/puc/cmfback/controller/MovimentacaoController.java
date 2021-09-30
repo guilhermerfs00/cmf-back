@@ -21,24 +21,28 @@ public class MovimentacaoController {
     private MovimentacaoService service;
 
     @PostMapping(value = "/cadastrar")
+    @CrossOrigin(origins = "http://localhost:8100")
     public ResponseEntity<MovimentacaoDTO> criarMovimentacao(@RequestBody MovimentacaoDTO movimentacaoDTO) {
         var resposta = service.criarMovimentacao(movimentacaoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
     @GetMapping(value = "/buscar-movimentacao-por-data/{dataInicial}/{dataFinal}")
+    @CrossOrigin(origins = "http://localhost:8100")
     public ResponseEntity<List<MovimentacaoDTO>> buscarMovimentacaoPorData(@RequestParam String dataInicial, @RequestParam String dataFinal) {
         var resposta = service.buscarMovimentacaoPorData(LocalDate.parse(dataInicial), LocalDate.parse(dataFinal));
         return ResponseEntity.status(HttpStatus.OK).body(resposta);
     }
 
     @GetMapping(value = "/tipoMovimentacao/{tipoMovimentacao}")
+    @CrossOrigin(origins = "http://localhost:8100")
     public ResponseEntity<List<MovimentacaoDTO>> buscarMovimentacaoPorData(@RequestParam TipoMovimentacaoEnum tipoMovimentacaoEnum) {
         var resposta = service.buscarMovimentacaoPorTipoMovimentacao(tipoMovimentacaoEnum.toString());
         return ResponseEntity.status(HttpStatus.OK).body(resposta);
     }
 
     @GetMapping(value = "/tipoOrdem/{tipoOrdem}")
+    @CrossOrigin(origins = "http://localhost:8100")
     public ResponseEntity<List<MovimentacaoDTO>> buscarMovimentacaoPorData(@RequestParam OrdemEnum ordemEnum) {
         var resposta = service.buscarMovimentacaoPorTipoOrdem(ordemEnum.toString());
         return ResponseEntity.status(HttpStatus.OK).body(resposta);

@@ -1,8 +1,11 @@
 package com.puc.cmfback.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +36,15 @@ public class CORSFilter implements Filter {
         }
     }
 
-    @Override
-    public void init(FilterConfig config) throws ServletException {
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/movimentacao/**").allowedOrigins("http://localhost:8100");
+                registry.addMapping("/produto/**").allowedOrigins("http://localhost:8100");
+                registry.addMapping("/usuario/**").allowedOrigins("http://localhost:8100");
+            }
+        };
     }
 }

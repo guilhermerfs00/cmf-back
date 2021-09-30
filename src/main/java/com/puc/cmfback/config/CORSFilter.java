@@ -1,11 +1,8 @@
 package com.puc.cmfback.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +14,6 @@ import java.io.IOException;
 public class CORSFilter implements Filter {
 
     @Override
-    public void destroy() {
-    }
-
-    @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
@@ -28,23 +21,11 @@ public class CORSFilter implements Filter {
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:8100");
         response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-Auth-Token, Content-Type");
+        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-Auth-Token, Content-Type, email, senha");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
         if (!"OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(req, res);
         }
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/movimentacao/**").allowedOrigins("http://localhost:8100");
-                registry.addMapping("/produto/**").allowedOrigins("http://localhost:8100");
-                registry.addMapping("/usuario/**").allowedOrigins("http://localhost:8100");
-            }
-        };
     }
 }

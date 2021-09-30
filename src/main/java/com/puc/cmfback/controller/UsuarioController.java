@@ -47,7 +47,7 @@ public class UsuarioController {
         return ResponseEntity.ok();
     }
 
-    @GetMapping(value = "/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<Boolean> login(@RequestHeader String email, @RequestHeader String senha) {
         var resposta = service.login(email, senha);
         return ResponseEntity.ok().body(resposta);

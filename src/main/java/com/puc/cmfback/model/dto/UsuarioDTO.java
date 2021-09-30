@@ -17,6 +17,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class UsuarioDTO {
 
+    private Integer idUsuario;
+
     @NotEmpty
     private String nome;
 

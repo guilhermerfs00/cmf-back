@@ -14,11 +14,11 @@ import java.io.IOException;
 public class CORSFilter implements Filter {
 
     @Override
-    public void destroy() { }
+    public void destroy() {
+    }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
 
@@ -28,11 +28,12 @@ public class CORSFilter implements Filter {
         response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-Auth-Token, Content-Type");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
-        if(!"OPTIONS".equalsIgnoreCase(request.getMethod())) {
+        if (!"OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(req, res);
         }
     }
 
     @Override
-    public void init(FilterConfig config) throws ServletException { }
+    public void init(FilterConfig config) throws ServletException {
+    }
 }

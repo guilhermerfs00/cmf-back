@@ -54,7 +54,7 @@ public class ProdutoService {
     public ProdutoDTO buscarProdutoPorId(Integer id) {
         var produto = repository.findById(id);
 
-        if (isNull(produto) || !produto.isPresent()) {
+        if (!produto.isPresent()) {
             throw new UsuarioException("Produto não encontrado", NOT_FOUND);
         }
 

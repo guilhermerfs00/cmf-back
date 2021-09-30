@@ -22,6 +22,8 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @Slf4j
 public class MovimentacaoService {
 
+    public static final String NENHUMA_MOVIMENTACAO_ENCONTRADA = "Nenhuma movimentacao encontrada";
+
     @Autowired
     private MovimentacaoRepository repository;
 
@@ -40,7 +42,7 @@ public class MovimentacaoService {
         var movimentacoes = repository.findAllByDataCriacaoBetween(dataInicial, dataFinal);
 
         if (isNull(movimentacoes) || movimentacoes.isEmpty()) {
-            throw new UsuarioException("Nenhuma movimentacao encontrada", NO_CONTENT);
+            throw new UsuarioException(NENHUMA_MOVIMENTACAO_ENCONTRADA, NO_CONTENT);
         }
 
         return buscarIdsTipoMovimentacao(movimentacoes);
@@ -50,7 +52,7 @@ public class MovimentacaoService {
         var movimentacoes = repository.findAllByTipoMovimentacao(tipoMovimentacaoEnum);
 
         if (isNull(movimentacoes) || movimentacoes.isEmpty()) {
-            throw new UsuarioException("Nenhuma movimentacao encontrada", NO_CONTENT);
+            throw new UsuarioException(NENHUMA_MOVIMENTACAO_ENCONTRADA, NO_CONTENT);
         }
         return buscarIdsTipoMovimentacao(movimentacoes);
     }
@@ -59,7 +61,7 @@ public class MovimentacaoService {
         var movimentacoes = repository.findAllByOrdem(ordemEnum);
 
         if (isNull(movimentacoes) || movimentacoes.isEmpty()) {
-            throw new UsuarioException("Nenhuma movimentacao encontrada", NO_CONTENT);
+            throw new UsuarioException(NENHUMA_MOVIMENTACAO_ENCONTRADA, NO_CONTENT);
         }
 
         return buscarIdsTipoMovimentacao(movimentacoes);

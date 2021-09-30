@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
 @Data
@@ -14,7 +15,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class DataMovimentacaoDTO {
 
+    @NotEmpty
     private LocalDate dataInicio;
+
+    @NotEmpty
     private LocalDate dataFim;
 
 }

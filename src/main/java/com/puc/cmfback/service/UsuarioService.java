@@ -1,7 +1,6 @@
 package com.puc.cmfback.service;
 
 import com.puc.cmfback.exception.errors.UsuarioException;
-import com.puc.cmfback.model.dto.LoginDTO;
 import com.puc.cmfback.model.dto.UsuarioDTO;
 import com.puc.cmfback.model.mapper.UsuarioMapper;
 import com.puc.cmfback.repository.UsuarioRepository;
@@ -17,7 +16,6 @@ import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-
 @Service
 @Slf4j
 public class UsuarioService {
@@ -27,12 +25,12 @@ public class UsuarioService {
 
     public UsuarioDTO buscarUsuarioPorEmail(String email) {
 
-        var usuario = repository.findByEmail(email).get();
+        var usuario = repository.findByEmail(email);
 
-        if (isNull(usuario)) {
+        if (isNull(usuario) || !usuario.isPresent()) {
             throw new UsuarioException("Email não encontrado", NOT_FOUND);
         }
-        return UsuarioMapper.INSTANCE.entityToDto(usuario);
+        return UsuarioMapper.INSTANCE.entityToDto(usuario.get());
     }
 
     public void deletarUsuarioPorEmail(String email) {
@@ -40,13 +38,12 @@ public class UsuarioService {
     }
 
     public List<UsuarioDTO> buscarTodosOsUsuarios() {
-        try {
-            var usuarios = repository.findAll();
+        var usuarios = repository.findAll();
 
-            return usuarios.stream().map(UsuarioMapper.INSTANCE::entityToDto).collect(toList());
-        } catch (Exception e) {
-            throw new UsuarioException("Erro ao buscar todos os usuários", NOT_FOUND);
-        }
+        if (usuarios.isEmpty())
+            throw new UsuarioException("Nenhum usuario encontrado", NOT_FOUND);
+
+        return usuarios.stream().map(UsuarioMapper.INSTANCE::entityToDto).collect(toList());
     }
 
     public void atualizarUsuario(UsuarioDTO usuarioDTO) {
@@ -80,11 +77,11 @@ public class UsuarioService {
     }
 
     public boolean login(String email, String senha) {
-        var usuario = repository.findByEmail(email).get();
+        var usuario = repository.findByEmail(email);
 
-        if (isNull(usuario))
-            throw new UsuarioException("Usuario nao encontrado", NOT_FOUND);
+        if (isNull(usuario) || !usuario.isPresent())
+            throw new UsuarioException("Email não encontrado", NOT_FOUND);
 
-        return usuario.getSenha().equals(senha);
+        return usuario.get().getSenha().equals(senha);
     }
 }

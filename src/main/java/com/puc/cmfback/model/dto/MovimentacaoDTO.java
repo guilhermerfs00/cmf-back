@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
 @Data
@@ -16,10 +17,21 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class MovimentacaoDTO {
 
+    private Integer idMovimentacao;
+
+    @NotEmpty
     private OrdemEnum ordem;
+
+    @NotEmpty
     private TipoMovimentacaoEnum tipoMovimentacao;
+
+    @NotEmpty
     private BigDecimal valor;
+
+    @NotEmpty
     private Integer idUsuario;
-    private Integer IdProduto;
+
+    @NotEmpty
+    private Integer idProduto;
 
 }

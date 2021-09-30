@@ -2,6 +2,7 @@ package com.puc.cmfback.model.entity;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -19,9 +20,12 @@ public class Usuario {
     @Id
     private Integer idUsuario;
 
+    @Column(name = "email", unique = true)
     private String email;
 
+    @Column(name = "nome")
     private String nome;
 
+    @Column(name = "senha")
     private String senha;
 }

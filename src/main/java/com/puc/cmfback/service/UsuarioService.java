@@ -1,6 +1,6 @@
 package com.puc.cmfback.service;
 
-import com.puc.cmfback.exception.errors.UsuarioException;
+import com.puc.cmfback.exception.errors.NegocioException;
 import com.puc.cmfback.model.dto.UsuarioDTO;
 import com.puc.cmfback.model.mapper.UsuarioMapper;
 import com.puc.cmfback.repository.UsuarioRepository;
@@ -28,7 +28,7 @@ public class UsuarioService {
         var usuario = repository.findByEmail(email);
 
         if (isNull(usuario) || !usuario.isPresent()) {
-            throw new UsuarioException("Email não encontrado", NOT_FOUND);
+            throw new NegocioException("Email não encontrado", NOT_FOUND);
         }
         return UsuarioMapper.INSTANCE.entityToDto(usuario.get());
     }
@@ -41,7 +41,7 @@ public class UsuarioService {
         var usuarios = repository.findAll();
 
         if (usuarios.isEmpty())
-            throw new UsuarioException("Nenhum usuario encontrado", NOT_FOUND);
+            throw new NegocioException("Nenhum usuario encontrado", NOT_FOUND);
 
         return usuarios.stream().map(UsuarioMapper.INSTANCE::entityToDto).collect(toList());
     }
@@ -52,7 +52,7 @@ public class UsuarioService {
 
             repository.atualizarUsuario(usuario.getEmail(), usuario.getNome(), usuario.getSenha());
         } catch (Exception e) {
-            throw new UsuarioException("Erro ao atualizar usuario", BAD_REQUEST);
+            throw new NegocioException("Erro ao atualizar usuario", BAD_REQUEST);
         }
     }
 
@@ -60,7 +60,7 @@ public class UsuarioService {
         var usuario = repository.findByEmail(email);
 
         if (isNull(usuario))
-            throw new UsuarioException("Usuario nao encontrado", NOT_FOUND);
+            throw new NegocioException("Usuario nao encontrado", NOT_FOUND);
     }
 
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
@@ -72,7 +72,7 @@ public class UsuarioService {
 
             return usuarioDTO;
         } catch (Exception e) {
-            throw new UsuarioException("Erro ao salvar usuario: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new NegocioException("Erro ao salvar usuario: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -80,7 +80,7 @@ public class UsuarioService {
         var usuario = repository.findByEmail(email);
 
         if (isNull(usuario) || !usuario.isPresent())
-            throw new UsuarioException("Email não encontrado", NOT_FOUND);
+            throw new NegocioException("Email não encontrado", NOT_FOUND);
 
         return usuario.get().getSenha().equals(senha);
     }

@@ -1,6 +1,6 @@
 package com.puc.cmfback.service;
 
-import com.puc.cmfback.exception.errors.UsuarioException;
+import com.puc.cmfback.exception.errors.NegocioException;
 import com.puc.cmfback.model.dto.ProdutoDTO;
 import com.puc.cmfback.model.mapper.ProdutoMapper;
 import com.puc.cmfback.repository.ProdutoRepository;
@@ -37,7 +37,7 @@ public class ProdutoService {
 
             return ProdutoMapper.INSTANCE.entityToDto(produto);
         } catch (Exception e) {
-            throw new UsuarioException("Erro ao salvar produto: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new NegocioException("Erro ao salvar produto: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -47,7 +47,7 @@ public class ProdutoService {
 
             return produtos.stream().map(ProdutoMapper.INSTANCE::entityToDto).collect(toList());
         } catch (Exception e) {
-            throw new UsuarioException("Erro ao buscar todos os usuários", NOT_FOUND);
+            throw new NegocioException("Erro ao buscar todos os usuários", NOT_FOUND);
         }
     }
 
@@ -55,7 +55,7 @@ public class ProdutoService {
         var produto = repository.findById(id);
 
         if (!produto.isPresent()) {
-            throw new UsuarioException("Produto não encontrado", NOT_FOUND);
+            throw new NegocioException("Produto não encontrado", NOT_FOUND);
         }
 
         return ProdutoMapper.INSTANCE.entityToDto(produto.get());
@@ -65,7 +65,7 @@ public class ProdutoService {
         var produtos = repository.findByNomeStartingWith(nome);
 
         if (isNull(produtos)) {
-            throw new UsuarioException("Nenhum produto encontrado com esse nome", NOT_FOUND);
+            throw new NegocioException("Nenhum produto encontrado com esse nome", NOT_FOUND);
         }
 
         return produtos.stream().map(ProdutoMapper.INSTANCE::entityToDto).collect(toList());
@@ -76,7 +76,7 @@ public class ProdutoService {
             var produto = ProdutoMapper.INSTANCE.dtoToEntity(produtoDTO);
             repository.save(produto);
         } catch (Exception e) {
-            throw new UsuarioException("Erro ao atualizar produto", BAD_REQUEST);
+            throw new NegocioException("Erro ao atualizar produto", BAD_REQUEST);
         }
     }
 
@@ -88,7 +88,7 @@ public class ProdutoService {
         var produto = repository.findByNome(nome);
 
         if (nonNull(produto))
-            throw new UsuarioException("Produto já cadastrado", BAD_REQUEST);
+            throw new NegocioException("Produto já cadastrado", BAD_REQUEST);
     }
 
 }

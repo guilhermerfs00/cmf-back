@@ -30,12 +30,12 @@ public class Movimentacao {
     private String ordem;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_produto", nullable = false)
+    @JoinColumn(name = "id_produto")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Produto produto;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_usuario", nullable = false)
+    @JoinColumn(name = "id_usuario")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Usuario usuario;
 

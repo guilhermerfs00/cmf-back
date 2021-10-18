@@ -39,5 +39,10 @@ public class Movimentacao {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Usuario usuario;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_categoria")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Categoria categoria;
+
     private LocalDate dataCriacao;
 }

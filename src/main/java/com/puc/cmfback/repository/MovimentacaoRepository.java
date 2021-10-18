@@ -24,16 +24,16 @@ public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Inte
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO Movimentacao (ordem, tipo_movimentacao, valor, id_produto, id_usuario, data_criacao) " +
-            " VALUES (:ordem, :tipoMovimentacao, :valor, :idProduto, :idUsuario, :dataCriacao)", nativeQuery = true)
-    void criarMovimentacaoComProduto(@Param("ordem") String ordem, @Param("tipoMovimentacao") String tipoMovimentacao,
-                                     @Param("valor") BigDecimal valor, @Param("idProduto") Integer idProduto,
-                                     @Param("idUsuario") Integer idUsuario, @Param("dataCriacao") LocalDate dataCriacao);
+    @Query(value = "INSERT INTO Movimentacao (ordem, valor, id_produto, id_usuario, id_categoria, data_criacao) " +
+            " VALUES (:ordem, :valor, :idProduto, :idUsuario, :idCategoria, :dataCriacao)", nativeQuery = true)
+    void criarMovimentacaoComProduto(@Param("ordem") String ordem, @Param("valor") BigDecimal valor, @Param("idProduto") Integer idProduto,
+                                     @Param("idUsuario") Integer idUsuario, @Param("idCategoria") Integer idCategoria,
+                                     @Param("dataCriacao") LocalDate dataCriacao);
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO Movimentacao (ordem, tipo_movimentacao, valor, id_produto, id_usuario, data_criacao) " +
-            " VALUES (:ordem, :tipoMovimentacao, :valor, null, :idUsuario, :dataCriacao)", nativeQuery = true)
-    void criarMovimentacaoSemProduto(@Param("ordem") String ordem, @Param("tipoMovimentacao") String tipoMovimentacao,
-                                     @Param("valor") BigDecimal valor, @Param("idUsuario") Integer idUsuario, @Param("dataCriacao") LocalDate dataCriacao);
+    @Query(value = "INSERT INTO Movimentacao (ordem, valor, id_produto, id_usuario, id_categoria, data_criacao) " +
+            " VALUES (:ordem, :valor, null, :idUsuario, :idCategoria, :dataCriacao)", nativeQuery = true)
+    void criarMovimentacaoSemProduto(@Param("ordem") String ordem, @Param("valor") BigDecimal valor, @Param("idUsuario") Integer idUsuario,
+                                     @Param("idCategoria") Integer idCategoria, @Param("dataCriacao") LocalDate dataCriacao);
 }

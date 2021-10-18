@@ -6,7 +6,6 @@ import com.puc.cmfback.model.mapper.UsuarioMapper;
 import com.puc.cmfback.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,21 +58,19 @@ public class UsuarioService {
     private void validarEmailJaExistente(String email) {
         var usuario = repository.findByEmail(email);
 
-        if (isNull(usuario))
-            throw new NegocioException("Usuario nao encontrado", NOT_FOUND);
+        if (usuario.isPresent())
+            throw new NegocioException("Usuário já cadastrado no sistema", BAD_REQUEST);
     }
 
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
-        try {
-            validarEmailJaExistente(usuarioDTO.getEmail());
+        validarEmailJaExistente(usuarioDTO.getEmail());
 
-            var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
-            repository.criarUsuario(usuario.getEmail(), usuario.getNome(), usuario.getSenha());
+        var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
+        repository.criarUsuario(usuario.getEmail(), usuario.getNome(), usuario.getSenha());
 
-            return usuarioDTO;
-        } catch (Exception e) {
-            throw new NegocioException("Erro ao salvar usuario: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        usuario = repository.findByEmail(usuario.getEmail()).get();
+
+        return UsuarioMapper.INSTANCE.entityToDto(usuario);
     }
 
     public boolean login(String email, String senha) {

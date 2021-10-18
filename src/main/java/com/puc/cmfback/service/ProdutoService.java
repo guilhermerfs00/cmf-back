@@ -37,7 +37,7 @@ public class ProdutoService {
 
             return ProdutoMapper.INSTANCE.entityToDto(produto);
         } catch (Exception e) {
-            throw new NegocioException("Erro ao salvar produto: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new NegocioException("Erro ao salvar produto", HttpStatus.BAD_REQUEST);
         }
     }
 

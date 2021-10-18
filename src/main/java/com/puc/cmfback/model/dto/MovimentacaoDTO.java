@@ -2,7 +2,6 @@ package com.puc.cmfback.model.dto;
 
 
 import com.puc.cmfback.model.enums.OrdemEnum;
-import com.puc.cmfback.model.enums.TipoMovimentacaoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,11 +15,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovimentacaoDTO {
-    @NotEmpty
-    private OrdemEnum ordem;
 
     @NotEmpty
-    private TipoMovimentacaoEnum tipoMovimentacao;
+    private OrdemEnum ordem;
 
     @NotEmpty
     private BigDecimal valor;
@@ -28,7 +25,9 @@ public class MovimentacaoDTO {
     @NotEmpty
     private Integer idUsuario;
 
-    @NotEmpty
     private Integer idProduto;
+
+    @NotEmpty
+    private Integer idCategoria;
 
 }

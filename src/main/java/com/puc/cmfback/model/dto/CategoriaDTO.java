@@ -1,24 +1,27 @@
 package com.puc.cmfback.model.dto;
 
 
+import com.puc.cmfback.model.enums.OrdemEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDate;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataMovimentacaoDTO {
+public class CategoriaDTO {
+
+    private Integer idCategoria;
 
     @NotEmpty
-    private LocalDate dataInicio;
+    private String nome;
 
     @NotEmpty
-    private LocalDate dataFim;
+    private OrdemEnum ordem;
 
 }

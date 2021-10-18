@@ -4,12 +4,12 @@ import com.puc.cmfback.exception.errors.NegocioException;
 import com.puc.cmfback.model.dto.MovimentacaoDTO;
 import com.puc.cmfback.model.entity.Movimentacao;
 import com.puc.cmfback.model.mapper.MovimentacaoMapper;
+import com.puc.cmfback.repository.CategoriaRepository;
 import com.puc.cmfback.repository.MovimentacaoRepository;
 import com.puc.cmfback.repository.ProdutoRepository;
 import com.puc.cmfback.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,7 +29,7 @@ public class MovimentacaoService {
     public static final String NENHUMA_MOVIMENTACAO_ENCONTRADA = "Nenhuma movimentacao encontrada";
 
     @Autowired
-    private MovimentacaoRepository repository;
+    private MovimentacaoRepository movimentacaoRepository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -37,11 +37,19 @@ public class MovimentacaoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
     public MovimentacaoDTO criarMovimentacao(MovimentacaoDTO movimentacaoDTO) {
         var usuario = usuarioRepository.findById(movimentacaoDTO.getIdUsuario());
 
         if (!usuario.isPresent())
             throw new NegocioException("Usuario não encontrado", NOT_FOUND);
+
+        var categoria = categoriaRepository.findById(movimentacaoDTO.getIdCategoria());
+
+        if (!categoria.isPresent())
+            throw new NegocioException("Categoria não encontrada", NOT_FOUND);
 
         if (Objects.nonNull(movimentacaoDTO.getIdProduto())) {
 
@@ -49,12 +57,12 @@ public class MovimentacaoService {
 
             if (!produto.isPresent())
                 throw new NegocioException("Produto não encontrado", NOT_FOUND);
-            
-            repository.criarMovimentacaoComProduto(movimentacaoDTO.getOrdem().toString(), movimentacaoDTO.getTipoMovimentacao().toString(),
-                    movimentacaoDTO.getValor(), movimentacaoDTO.getIdProduto(), movimentacaoDTO.getIdUsuario(), LocalDate.now());
+
+            movimentacaoRepository.criarMovimentacaoComProduto(movimentacaoDTO.getOrdem().toString(), movimentacaoDTO.getValor(),
+                    movimentacaoDTO.getIdProduto(), movimentacaoDTO.getIdUsuario(), movimentacaoDTO.getIdCategoria(), LocalDate.now());
         } else {
-            repository.criarMovimentacaoSemProduto(movimentacaoDTO.getOrdem().toString(), movimentacaoDTO.getTipoMovimentacao().toString(),
-                    movimentacaoDTO.getValor(), movimentacaoDTO.getIdUsuario(), LocalDate.now());
+            movimentacaoRepository.criarMovimentacaoSemProduto(movimentacaoDTO.getOrdem().toString(), movimentacaoDTO.getValor(),
+                    movimentacaoDTO.getIdUsuario(), movimentacaoDTO.getIdCategoria(), LocalDate.now());
         }
 
 
@@ -62,7 +70,7 @@ public class MovimentacaoService {
     }
 
     public List<MovimentacaoDTO> buscarMovimentacaoPorData(LocalDate dataInicial, LocalDate dataFinal) {
-        var movimentacoes = repository.findAllByDataCriacaoBetween(dataInicial, dataFinal);
+        var movimentacoes = movimentacaoRepository.findAllByDataCriacaoBetween(dataInicial, dataFinal);
 
         if (isNull(movimentacoes) || movimentacoes.isEmpty()) {
             throw new NegocioException(NENHUMA_MOVIMENTACAO_ENCONTRADA, NO_CONTENT);
@@ -72,7 +80,7 @@ public class MovimentacaoService {
     }
 
     public List<MovimentacaoDTO> buscarMovimentacaoPorTipoMovimentacao(String tipoMovimentacaoEnum) {
-        var movimentacoes = repository.findAllByTipoMovimentacao(tipoMovimentacaoEnum);
+        var movimentacoes = movimentacaoRepository.findAllByTipoMovimentacao(tipoMovimentacaoEnum);
 
         if (isNull(movimentacoes) || movimentacoes.isEmpty()) {
             throw new NegocioException(NENHUMA_MOVIMENTACAO_ENCONTRADA, NO_CONTENT);
@@ -81,7 +89,7 @@ public class MovimentacaoService {
     }
 
     public List<MovimentacaoDTO> buscarMovimentacaoPorTipoOrdem(String ordemEnum) {
-        var movimentacoes = repository.findAllByOrdem(ordemEnum);
+        var movimentacoes = movimentacaoRepository.findAllByOrdem(ordemEnum);
 
         if (isNull(movimentacoes) || movimentacoes.isEmpty()) {
             throw new NegocioException(NENHUMA_MOVIMENTACAO_ENCONTRADA, NO_CONTENT);

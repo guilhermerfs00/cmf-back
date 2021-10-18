@@ -27,7 +27,7 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaDTO);
     }
 
-    @GetMapping(value = "/buscar-por-nome")
+    @GetMapping(value = "/buscar-por-nome/{nome}")
     public ResponseEntity<CategoriaDTO> buscarCategoriaPorNome(@RequestParam String nome) {
         var resposta = service.buscarCategoriaPorNome(nome);
         return ResponseEntity.ok().body(resposta);

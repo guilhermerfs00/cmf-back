@@ -23,6 +23,6 @@ public class Categoria {
     @Column(name = "nome", unique = true)
     private String nome;
 
-    @Column(name = "ordem", unique = true)
+    @Column(name = "ordem")
     private String ordem;
 }

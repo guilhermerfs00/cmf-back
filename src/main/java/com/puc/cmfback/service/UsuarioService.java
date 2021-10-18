@@ -68,9 +68,13 @@ public class UsuarioService {
         var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
         repository.criarUsuario(usuario.getEmail(), usuario.getNome(), usuario.getSenha());
 
-        usuario = repository.findByEmail(usuario.getEmail()).get();
+        var usuarioOpt = repository.findByEmail(usuario.getEmail());
 
-        return UsuarioMapper.INSTANCE.entityToDto(usuario);
+        if (usuarioOpt.isPresent()) {
+            return UsuarioMapper.INSTANCE.entityToDto(usuario);
+        } else {
+            throw new NegocioException("Usuario não encontrado", NOT_FOUND);
+        }
     }
 
     public boolean login(String email, String senha) {

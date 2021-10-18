@@ -19,6 +19,7 @@ public class CORSFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
 
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:8100");
+        response.setHeader("Access-Control-Allow-Origin", "https://cmf-front.netlify.app");
         response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-Auth-Token, Content-Type, email, senha");

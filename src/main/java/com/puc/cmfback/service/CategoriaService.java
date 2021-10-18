@@ -2,15 +2,14 @@ package com.puc.cmfback.service;
 
 import com.puc.cmfback.exception.errors.NegocioException;
 import com.puc.cmfback.model.dto.CategoriaDTO;
-import com.puc.cmfback.model.dto.ProdutoDTO;
 import com.puc.cmfback.model.mapper.CategoriaMapper;
-import com.puc.cmfback.model.mapper.ProdutoMapper;
 import com.puc.cmfback.repository.CategoriaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @Slf4j
@@ -34,9 +33,13 @@ public class CategoriaService {
 
         repository.criarCategoria(categoriaDTO.getNome(), categoriaDTO.getOrdem().toString());
 
-        var categoria = repository.findByNome(categoriaDTO.getNome()).get();
+        var categoria = repository.findByNome(categoriaDTO.getNome());
 
-        return CategoriaMapper.INSTANCE.entityToDto(categoria);
+        if (categoria.isPresent()) {
+            return CategoriaMapper.INSTANCE.entityToDto(categoria.get());
+        } else {
+            throw new NegocioException("Categoria não encontrada", NOT_FOUND);
+        }
     }
 
     public void atualizarCategoria(CategoriaDTO categoriaDTO) {

@@ -48,8 +48,8 @@ public class ProdutoController {
     }
 
     @DeleteMapping(value = "/deletar/{id}")
-    public ResponseEntity.BodyBuilder deletarUsuarioPorId(@RequestParam Integer id) {
+    public ResponseEntity<Void> deletarUsuarioPorId(@RequestParam Integer id) {
         service.deletarProdutoPorId(id);
-        return ResponseEntity.ok();
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

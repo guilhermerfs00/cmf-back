@@ -23,4 +23,7 @@ public class NotificacaoDTO {
     @NotEmpty
     private Integer idConta;
 
+    @NotEmpty
+    private Integer idUsuario;
+
 }

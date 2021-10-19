@@ -37,8 +37,8 @@ public class UsuarioController {
 
     @PutMapping(value = "/atualizar")
     public ResponseEntity<UsuarioDTO> atualizarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        service.atualizarUsuario(usuarioDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioDTO);
+        var resposta = service.atualizarUsuario(usuarioDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
     @DeleteMapping(value = "/deletar/{email}")

@@ -4,6 +4,7 @@ package com.puc.cmfback.repository;
 import com.puc.cmfback.model.entity.Conta;
 import com.puc.cmfback.model.entity.Movimentacao;
 import com.puc.cmfback.model.entity.Notificacao;
+import com.puc.cmfback.model.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,10 +19,12 @@ import java.util.List;
 public interface NotificacaoRepository extends JpaRepository<Notificacao, Integer> {
 
 
-    List<Movimentacao> findAllByConta(Conta conta);
+    List<Notificacao> findAllByConta(Conta conta);
+
+    List<Notificacao> findAllByUsuario(Usuario usuario);
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO Notificacao (data_lembrete, id_conta) VALUES (:dataLembrete, :idConta)", nativeQuery = true)
-    void criarNotificacao(@Param("dataLembrete") LocalDateTime dataLembrete, @Param("idConta") Integer idConta);
+    @Query(value = "INSERT INTO Notificacao (data_lembrete, id_conta, id_usuario) VALUES (:dataLembrete, :idConta, :idUsuario)", nativeQuery = true)
+    void criarNotificacao(@Param("dataLembrete") LocalDateTime dataLembrete, @Param("idConta") Integer idConta, @Param("idUsuario") Integer idUsuario);
 }

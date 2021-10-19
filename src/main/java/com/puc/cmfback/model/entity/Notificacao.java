@@ -27,4 +27,9 @@ public class Notificacao {
     @JoinColumn(name = "id_conta")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Conta conta;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_usuario")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Usuario usuario;
 }

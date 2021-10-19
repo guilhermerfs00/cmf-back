@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(value = "/notificacao")
 public class NotificacaoController {
@@ -16,20 +18,32 @@ public class NotificacaoController {
     private NotificacaoService service;
 
     @PostMapping(value = "/cadastrar")
-    public ResponseEntity<String> criarCategoria(@RequestBody NotificacaoDTO categoriaDTO) {
+    public ResponseEntity<String> criarNotificacao(@RequestBody NotificacaoDTO categoriaDTO) {
         var resposta = service.criarNotificacao(categoriaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
-//
-//    @GetMapping(value = "/buscar-por-conta/{idConta}")
-//    public ResponseEntity<NotificacaoDTO> buscarNotificacaoPorConta(@RequestParam Integer idConta) {
-//        var resposta = service.buscarNotificacaoPorConta(idConta);
-//        return ResponseEntity.ok().body(resposta);
-//    }
-//
-//    @DeleteMapping(value = "/deletar/{id}")
-//    public ResponseEntity.BodyBuilder deletarCategoriaPorId(@RequestParam Integer id) {
-//        service.deletarCategoriaPorId(id);
-//        return ResponseEntity.ok();
-//    }
+
+    @GetMapping(value = "/buscar-por-conta/{contaId}")
+    public ResponseEntity<List<NotificacaoDTO>> buscarNotificacaoPorConta(@RequestParam Integer contaId) {
+        var resposta = service.buscarNotificacaoPorIdConta(contaId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
+    }
+
+    @GetMapping(value = "/buscar-por-usuario/{usuarioId}")
+    public ResponseEntity<List<NotificacaoDTO>> buscarNotificacaoPorUsuario(@RequestParam Integer usucarioId) {
+        var resposta = service.buscarNotificacaoPorIdUsuario(usucarioId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
+    }
+
+    @DeleteMapping(value = "/deletar/{id}")
+    public ResponseEntity<Void> deletarNotificacoPorId(@RequestParam Integer id) {
+        service.deletarNotificacaoPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @PutMapping(value = "/atualizar")
+    public ResponseEntity<NotificacaoDTO> atualizarNotificaco(@RequestBody NotificacaoDTO notificacaoDTO) {
+        var resposta = service.atualizarNotificaco(notificacaoDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(resposta);
+    }
 }

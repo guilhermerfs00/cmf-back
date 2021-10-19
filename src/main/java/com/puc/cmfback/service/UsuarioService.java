@@ -45,14 +45,12 @@ public class UsuarioService {
         return usuarios.stream().map(UsuarioMapper.INSTANCE::entityToDto).collect(toList());
     }
 
-    public void atualizarUsuario(UsuarioDTO usuarioDTO) {
-        try {
-            var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
+    public UsuarioDTO atualizarUsuario(UsuarioDTO usuarioDTO) {
+        var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
 
-            repository.atualizarUsuario(usuario.getEmail(), usuario.getNome(), usuario.getSenha());
-        } catch (Exception e) {
-            throw new NegocioException("Erro ao atualizar usuario", BAD_REQUEST);
-        }
+        usuario = repository.save(usuario);
+
+        return UsuarioMapper.INSTANCE.entityToDto(usuario);
     }
 
     private void validarEmailJaExistente(String email) {

@@ -2,13 +2,17 @@ package com.puc.cmfback.service;
 
 import com.puc.cmfback.exception.errors.NegocioException;
 import com.puc.cmfback.model.dto.NotificacaoDTO;
+import com.puc.cmfback.model.mapper.NotificacaoMapper;
+import com.puc.cmfback.repository.ContaRepository;
 import com.puc.cmfback.repository.NotificacaoRepository;
+import com.puc.cmfback.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -17,50 +21,84 @@ public class NotificacaoService {
     @Autowired
     private NotificacaoRepository repository;
 
-//    public CategoriaDTO buscarCategoriaPorNome(String nome) {
-//
-//        var categoria = repository.findByNome(nome);
-//
-//        if (!categoria.isPresent())
-//            throw new NegocioException("Categoria não encontrada", BAD_REQUEST);
-//
-//        return CategoriaMapper.INSTANCE.entityToDto(categoria.get());
-//    }
+    @Autowired
+    private ContaRepository contaRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
 
     public String criarNotificacao(NotificacaoDTO notificacaoDTO) {
 
-        repository.criarNotificacao(notificacaoDTO.getDataLembrete(), notificacaoDTO.getIdConta());
+        repository.criarNotificacao(notificacaoDTO.getDataLembrete(), notificacaoDTO.getIdConta(), notificacaoDTO.getIdUsuario());
 
         return "Notificação criada com sucesso";
     }
 
-//    public List<NotificacaoDTO> buscarNotificacaoPorConta(Integer idConta) {
-//        var notificacao = repository.findById(idConta);
-//        if (notificacao.isPresent()) {
-//            repository.findAllByConta(notificacao.get().getConta());
-//            return null;
-//        } else {
-//            throw new NegocioException("Nenhuma notificacao tem o id: " + idConta, HttpStatus.NOT_FOUND);
-//        }
-//    }
+    public List<NotificacaoDTO> buscarNotificacaoPorIdConta(Integer idConta) {
 
-//    public void atualizarCategoria(CategoriaDTO categoriaDTO) {
-//        try {
-//            var categoria = CategoriaMapper.INSTANCE.dtoToEntity(categoriaDTO);
-//            repository.save(categoria);
-//        } catch (Exception e) {
-//            throw new NegocioException("Erro ao atualizar categoria", BAD_REQUEST);
-//        }
-//    }
-//
-//    private void validarCategoriaJaCadastrada(String nome) {
-//        var categoria = repository.findByNome(nome);
-//
-//        if (categoria.isPresent())
-//            throw new NegocioException("Categoria já cadastrada", BAD_REQUEST);
-//    }
-//
-//    public void deletarCategoriaPorId(Integer id) {
-//        repository.deleteById(id);
-//    }
+        var conta = contaRepository.findById(idConta);
+
+        if (!conta.isPresent()) {
+            throw new NegocioException("Nenhuma conta encontrada", HttpStatus.NOT_FOUND);
+        }
+
+        var notificacaoList = repository.findAllByConta(conta.get());
+
+        return notificacaoList.stream().map(notificacao -> {
+            var notificacaoDTO = NotificacaoMapper.INSTANCE.entityToDto(notificacao);
+            notificacaoDTO.setIdConta(notificacao.getConta().getIdConta());
+            notificacaoDTO.setIdUsuario(notificacao.getUsuario().getIdUsuario());
+            return notificacaoDTO;
+        }).collect(Collectors.toList());
+    }
+
+    public List<NotificacaoDTO> buscarNotificacaoPorIdUsuario(Integer idUsuario) {
+
+        var usuario = usuarioRepository.findById(idUsuario);
+
+        if (!usuario.isPresent()) {
+            throw new NegocioException("Nenhum usuario encontrado", HttpStatus.NOT_FOUND);
+        }
+
+        var notificacaoList = repository.findAllByUsuario(usuario.get());
+
+        return notificacaoList.stream().map(notificacao -> {
+            var notificacaoDTO = NotificacaoMapper.INSTANCE.entityToDto(notificacao);
+            notificacaoDTO.setIdConta(notificacao.getConta().getIdConta());
+            notificacaoDTO.setIdUsuario(notificacao.getUsuario().getIdUsuario());
+            return notificacaoDTO;
+        }).collect(Collectors.toList());
+    }
+
+    public void deletarNotificacaoPorId(Integer id) {
+        repository.deleteById(id);
+    }
+
+    public NotificacaoDTO atualizarNotificaco(NotificacaoDTO notificacaoDTO) {
+        var notificacao = NotificacaoMapper.INSTANCE.dtoToEntity(notificacaoDTO);
+
+        var usuario = usuarioRepository.findById(notificacaoDTO.getIdUsuario());
+        var conta = contaRepository.findById(notificacaoDTO.getIdConta());
+
+        if (!usuario.isPresent()) {
+            throw new NegocioException("Usuário não encontrado", HttpStatus.NOT_FOUND);
+        }
+
+        if (!conta.isPresent()) {
+            throw new NegocioException("Conta não encontrada", HttpStatus.NOT_FOUND);
+        }
+
+        notificacao.setUsuario(usuario.get());
+        notificacao.setConta(conta.get());
+
+        notificacao = repository.save(notificacao);
+
+        notificacaoDTO = NotificacaoMapper.INSTANCE.entityToDto(notificacao);
+
+        notificacaoDTO.setIdUsuario(usuario.get().getIdUsuario());
+        notificacaoDTO.setIdConta(conta.get().getIdConta());
+
+        return notificacaoDTO;
+    }
 }

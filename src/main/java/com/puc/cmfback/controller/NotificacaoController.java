@@ -30,8 +30,8 @@ public class NotificacaoController {
     }
 
     @GetMapping(value = "/buscar-por-usuario/{usuarioId}")
-    public ResponseEntity<List<NotificacaoDTO>> buscarNotificacaoPorUsuario(@RequestParam Integer usucarioId) {
-        var resposta = service.buscarNotificacaoPorIdUsuario(usucarioId);
+    public ResponseEntity<List<NotificacaoDTO>> buscarNotificacaoPorUsuario(@RequestParam Integer usuarioId) {
+        var resposta = service.buscarNotificacaoPorIdUsuario(usuarioId);
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 

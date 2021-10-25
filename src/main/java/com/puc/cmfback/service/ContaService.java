@@ -24,7 +24,7 @@ public class ContaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public String criarConta(ContaDTO contaDTO) {
+    public ContaDTO criarConta(ContaDTO contaDTO) {
 
         var usuario = usuarioRepository.findById(contaDTO.getIdUsuario());
 
@@ -34,7 +34,7 @@ public class ContaService {
 
         repository.criarConta(contaDTO.getTipoConta(), contaDTO.getDataVencimento(), contaDTO.getValorConta(), contaDTO.getReceberNotificacao(), contaDTO.getIdUsuario());
 
-        return "Conta criada com sucesso";
+        return contaDTO;
     }
 
     public List<ContaDTO> buscarContaPorIdUsuario(Integer idUsuario) {

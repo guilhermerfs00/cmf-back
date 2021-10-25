@@ -18,11 +18,10 @@ public class ContaController {
     private ContaService service;
 
     @PostMapping(value = "/cadastrar")
-    public ResponseEntity<String> criarConta(@RequestBody ContaDTO contaDTO) {
+    public ResponseEntity<ContaDTO> criarConta(@RequestBody ContaDTO contaDTO) {
         var resposta = service.criarConta(contaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
-
 
     @GetMapping(value = "/buscar-por-usuario/{usuarioId}")
     public ResponseEntity<List<ContaDTO>> buscarContaPorUsuario(@RequestParam Integer usucarioId) {

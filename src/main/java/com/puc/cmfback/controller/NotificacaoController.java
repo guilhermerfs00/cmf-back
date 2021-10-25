@@ -18,7 +18,7 @@ public class NotificacaoController {
     private NotificacaoService service;
 
     @PostMapping(value = "/cadastrar")
-    public ResponseEntity<String> criarNotificacao(@RequestBody NotificacaoDTO categoriaDTO) {
+    public ResponseEntity<NotificacaoDTO> criarNotificacao(@RequestBody NotificacaoDTO categoriaDTO) {
         var resposta = service.criarNotificacao(categoriaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }

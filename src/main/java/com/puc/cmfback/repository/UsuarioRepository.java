@@ -23,9 +23,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Transactional
     @Query(value = "INSERT INTO Usuario (email, nome, senha) VALUES (:email, :nome, :senha)", nativeQuery = true)
     void criarUsuario(@Param("email") String email, @Param("nome") String nome, @Param("senha") String senha);
-
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE Usuario u SET senha =:senha, nome=:nome WHERE u.email = :email", nativeQuery = true)
-    void atualizarUsuario(@Param("email") String email, @Param("nome") String nome, @Param("senha") String senha);
 }

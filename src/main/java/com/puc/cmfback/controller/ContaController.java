@@ -24,8 +24,8 @@ public class ContaController {
     }
 
     @GetMapping(value = "/buscar-por-usuario/{usuarioId}")
-    public ResponseEntity<List<ContaDTO>> buscarContaPorUsuario(@RequestParam Integer usucarioId) {
-        var resposta = service.buscarContaPorIdUsuario(usucarioId);
+    public ResponseEntity<List<ContaDTO>> buscarContaPorUsuario(@RequestParam Integer usuarioId) {
+        var resposta = service.buscarContaPorIdUsuario(usuarioId);
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 

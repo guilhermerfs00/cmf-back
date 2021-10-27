@@ -5,7 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Table(name = "notificacao")
 @Entity
@@ -21,7 +21,7 @@ public class Notificacao {
     private Integer idNotificacao;
 
     @Column(name = "data_lembrete")
-    private LocalDateTime dataLembrete;
+    private LocalDate dataLembrete;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_conta")

@@ -51,9 +51,10 @@ CREATE TABLE conta(
 CREATE TABLE notificacao (
 	id_notificacao INT GENERATED ALWAYS AS IDENTITY,
 	data_lembrete date NULL,
-    hosrario_lembrete timestamp null,
     id_conta  int4 NULL,
+    id_usuario int4 NULL,
 	PRIMARY KEY (id_notificacao),
 	CONSTRAINT fk_notificacao
-	FOREIGN KEY (id_conta) REFERENCES conta(id_conta)
+	FOREIGN KEY (id_conta) REFERENCES conta(id_conta),
+	FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );

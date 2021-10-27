@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import java.math.BigInteger;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -21,6 +23,8 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository repository;
+
+    private EntityManager em;
 
     public UsuarioDTO buscarUsuarioPorEmail(String email) {
 
@@ -64,7 +68,9 @@ public class UsuarioService {
         validarEmailJaExistente(usuarioDTO.getEmail());
 
         var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
-        repository.criarUsuario(usuario.getEmail(), usuario.getNome(), usuario.getSenha());
+
+
+//        repository.criarUsuario(usuario.getEmail(), usuario.getNome(), usuario.getSenha());
 
         var usuarioOpt = repository.findByEmail(usuario.getEmail());
 
@@ -82,5 +88,16 @@ public class UsuarioService {
             throw new NegocioException("Email não encontrado", NOT_FOUND);
 
         return usuario.get().getSenha().equals(senha);
+    }
+
+    public Integer queryCriarUsuario() {
+
+        var query = em.createNativeQuery("INSERT INTO Usuario (email, nome, senha) VALUES (:email, :nome, :senha)");
+
+        var biid = (BigInteger) query.getSingleResult();
+
+        Long id = biid.longValue();
+
+        return id.intValue();
     }
 }

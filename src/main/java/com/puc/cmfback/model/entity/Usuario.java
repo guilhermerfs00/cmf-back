@@ -2,10 +2,7 @@ package com.puc.cmfback.model.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table(name = "usuario")
 @Entity
@@ -18,6 +15,8 @@ import javax.persistence.Table;
 public class Usuario {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario", unique = true, nullable = false)
     private Integer idUsuario;
 
     @Column(name = "email", unique = true)

@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -18,7 +18,7 @@ public class NotificacaoDTO {
     private Integer idNotificacao;
 
     @NotEmpty
-    private LocalDateTime dataLembrete;
+    private LocalDate dataLembrete;
 
     @NotEmpty
     private Integer idConta;

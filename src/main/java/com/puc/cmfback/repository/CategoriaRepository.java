@@ -18,9 +18,4 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
     @Transactional
     void deleteByNome(String nome);
-
-    @Modifying
-    @Transactional
-    @Query(value = "INSERT INTO Categoria (nome, ordem) VALUES (:nome, :ordem)", nativeQuery = true)
-    void criarCategoria(@Param("nome") String nome, @Param("ordem") String ordem);
 }

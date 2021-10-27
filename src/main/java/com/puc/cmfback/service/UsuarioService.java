@@ -69,7 +69,7 @@ public class UsuarioService {
 
         var usuario = UsuarioMapper.INSTANCE.dtoToEntity(usuarioDTO);
 
-        repository.criarUsuario(usuario.getEmail(), usuario.getNome(), usuario.getSenha());
+        repository.save(usuario);
 
         var usuarioOpt = repository.findByEmail(usuario.getEmail());
 

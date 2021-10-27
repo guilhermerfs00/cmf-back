@@ -2,10 +2,8 @@ package com.puc.cmfback.model.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Table(name = "categoria")
 @Entity
@@ -15,9 +13,11 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Categoria {
+public class Categoria implements Serializable {
 
     @Id
+    @GeneratedValue(generator = "categoria_generator")
+    @SequenceGenerator(name = "categoria_generator", sequenceName = "categoria_sequence")
     private Integer idCategoria;
 
     @Column(name = "nome", unique = true)

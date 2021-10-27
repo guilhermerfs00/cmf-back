@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -16,9 +17,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Conta {
+public class Conta implements Serializable {
 
     @Id
+    @GeneratedValue(generator = "conta_generator")
+    @SequenceGenerator(name = "conta_generator", sequenceName = "conta_sequence")
     private Integer idConta;
 
     @Column(name = "tipo_conta")

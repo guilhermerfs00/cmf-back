@@ -3,18 +3,17 @@ package com.puc.cmfback.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Table(name = "usuario")
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class Usuario {
+public class Usuario implements Serializable {
 
     @Id
+    @GeneratedValue(generator = "usuario_generator")
+    @SequenceGenerator(name = "usuario_generator", sequenceName = "usuario_sequence")
     private Integer idUsuario;
 
     @Column(name = "email", unique = true)

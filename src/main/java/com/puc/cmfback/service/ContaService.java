@@ -29,10 +29,16 @@ public class ContaService {
         var usuario = usuarioRepository.findById(contaDTO.getIdUsuario());
 
         if (!usuario.isPresent()) {
-            throw new NegocioException("Pessoa não encontrada", HttpStatus.NOT_FOUND);
+            throw new NegocioException("Usuario não encontrado", HttpStatus.NOT_FOUND);
         }
 
-        repository.criarConta(contaDTO.getTipoConta(), contaDTO.getDataVencimento(), contaDTO.getValorConta(), contaDTO.getReceberNotificacao(), contaDTO.getIdUsuario());
+        var conta = ContaMapper.INSTANCE.dtoToEntity(contaDTO);
+        conta.setUsuario(usuario.get());
+        conta = repository.save(conta);
+
+
+        contaDTO = ContaMapper.INSTANCE.entityToDto(conta);
+        contaDTO.setIdUsuario(conta.getUsuario().getIdUsuario());
 
         return contaDTO;
     }

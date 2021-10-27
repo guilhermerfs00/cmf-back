@@ -16,11 +16,5 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
     Produto findByNome(String nome);
 
-    @Modifying
-    @Transactional
-    @Query(value = "INSERT INTO Produto (nome, quantidade) VALUES (:nome, :quantidade)", nativeQuery = true)
-    Integer criarProduto(@Param("nome") String nome, @Param("quantidade") Integer quantidade);
-
-
     List<Produto> findByNomeStartingWith(String nome);
 }

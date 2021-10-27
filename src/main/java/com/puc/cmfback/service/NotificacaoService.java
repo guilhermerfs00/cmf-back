@@ -7,7 +7,6 @@ import com.puc.cmfback.repository.ContaRepository;
 import com.puc.cmfback.repository.NotificacaoRepository;
 import com.puc.cmfback.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,29 @@ public class NotificacaoService {
 
     public NotificacaoDTO criarNotificacao(NotificacaoDTO notificacaoDTO) {
 
-        repository.criarNotificacao(notificacaoDTO.getDataLembrete(), notificacaoDTO.getIdConta(), notificacaoDTO.getIdUsuario());
+        var usuario = usuarioRepository.findById(notificacaoDTO.getIdUsuario());
+
+        if (!usuario.isPresent()) {
+            throw new NegocioException("Usuario não encontrado", HttpStatus.NOT_FOUND);
+        }
+
+        var conta = contaRepository.findById(notificacaoDTO.getIdConta());
+
+        if (!conta.isPresent()) {
+            throw new NegocioException("Conta não encontrada", HttpStatus.NOT_FOUND);
+        }
+
+        var notificacao = NotificacaoMapper.INSTANCE.dtoToEntity(notificacaoDTO);
+
+        notificacao.setConta(conta.get());
+        notificacao.setUsuario(usuario.get());
+
+        notificacao = repository.save(notificacao);
+
+        notificacaoDTO = NotificacaoMapper.INSTANCE.entityToDto(notificacao);
+
+        notificacaoDTO.setIdUsuario(notificacao.getUsuario().getIdUsuario());
+        notificacaoDTO.setIdConta(notificacao.getConta().getIdConta());
 
         return notificacaoDTO;
     }

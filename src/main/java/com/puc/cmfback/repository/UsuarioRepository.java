@@ -18,9 +18,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     @Transactional
     void deleteByEmail(String email);
-
-    @Modifying
-    @Transactional
-    @Query(value = "INSERT INTO Usuario (email, nome, senha) VALUES (:email, :nome, :senha)", nativeQuery = true)
-    void criarUsuario(@Param("email") String email, @Param("nome") String nome, @Param("senha") String senha);
 }

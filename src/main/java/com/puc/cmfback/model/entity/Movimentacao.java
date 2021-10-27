@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -17,10 +18,11 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Movimentacao {
+public class Movimentacao implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "movimentacao_generator")
+    @SequenceGenerator(name = "movimentacao_generator", sequenceName = "movimentacao_sequence")
     private Integer idMovimentacao;
 
     private BigDecimal valor;

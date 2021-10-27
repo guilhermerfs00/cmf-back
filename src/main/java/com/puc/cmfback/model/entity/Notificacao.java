@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Table(name = "notificacao")
@@ -15,9 +16,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Notificacao {
+public class Notificacao implements Serializable {
 
     @Id
+    @GeneratedValue(generator = "notificacao_generator")
+    @SequenceGenerator(name = "notificacao_generator", sequenceName = "notificacao_sequence")
     private Integer idNotificacao;
 
     @Column(name = "data_lembrete")

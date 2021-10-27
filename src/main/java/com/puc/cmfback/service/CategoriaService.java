@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -31,12 +33,10 @@ public class CategoriaService {
     public CategoriaDTO criarCategoria(CategoriaDTO categoriaDTO) {
         validarCategoriaJaCadastrada(categoriaDTO.getNome());
 
-        repository.criarCategoria(categoriaDTO.getNome(), categoriaDTO.getOrdem().toString());
+        var categoria = repository.save(CategoriaMapper.INSTANCE.dtoToEntity(categoriaDTO));
 
-        var categoria = repository.findByNome(categoriaDTO.getNome());
-
-        if (categoria.isPresent()) {
-            return CategoriaMapper.INSTANCE.entityToDto(categoria.get());
+        if (Objects.nonNull(categoria)) {
+            return CategoriaMapper.INSTANCE.entityToDto(categoria);
         } else {
             throw new NegocioException("Categoria não encontrada", NOT_FOUND);
         }

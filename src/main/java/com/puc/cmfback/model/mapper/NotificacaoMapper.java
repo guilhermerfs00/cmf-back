@@ -15,8 +15,4 @@ public interface NotificacaoMapper {
     NotificacaoDTO entityToDto(Notificacao entity);
 
     Notificacao dtoToEntity(NotificacaoDTO dto);
-
-    List<Notificacao> dtoListToEntityList(List<NotificacaoDTO> dto);
-
-    List<NotificacaoDTO> entityListToDtoList(List<Notificacao> entity);
 }

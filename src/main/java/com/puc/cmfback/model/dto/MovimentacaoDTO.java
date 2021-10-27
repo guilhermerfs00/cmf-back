@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class MovimentacaoDTO {
 
+    private Integer idMovimentacao;
+
     @NotEmpty
     private OrdemEnum ordem;
 

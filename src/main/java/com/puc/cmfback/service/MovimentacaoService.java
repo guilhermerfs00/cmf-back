@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
@@ -51,20 +50,22 @@ public class MovimentacaoService {
         if (!categoria.isPresent())
             throw new NegocioException("Categoria não encontrada", NOT_FOUND);
 
-        if (Objects.nonNull(movimentacaoDTO.getIdProduto())) {
+        var produto = produtoRepository.findById(movimentacaoDTO.getIdProduto());
 
-            var produto = produtoRepository.findById(movimentacaoDTO.getIdProduto());
+        if (!produto.isPresent())
+            throw new NegocioException("Produto não encontrado", NOT_FOUND);
 
-            if (!produto.isPresent())
-                throw new NegocioException("Produto não encontrado", NOT_FOUND);
+        var movimentacao = MovimentacaoMapper.INSTANCE.dtoToEntity(movimentacaoDTO);
+        movimentacao.setUsuario(usuario.get());
+        movimentacao.setProduto(produto.get());
+        movimentacao.setCategoria(categoria.get());
 
-            movimentacaoRepository.criarMovimentacaoComProduto(movimentacaoDTO.getOrdem().toString(), movimentacaoDTO.getValor(),
-                    movimentacaoDTO.getIdProduto(), movimentacaoDTO.getIdUsuario(), movimentacaoDTO.getIdCategoria(), LocalDate.now());
-        } else {
-            movimentacaoRepository.criarMovimentacaoSemProduto(movimentacaoDTO.getOrdem().toString(), movimentacaoDTO.getValor(),
-                    movimentacaoDTO.getIdUsuario(), movimentacaoDTO.getIdCategoria(), LocalDate.now());
-        }
+        movimentacao = movimentacaoRepository.save(movimentacao);
 
+        movimentacaoDTO = MovimentacaoMapper.INSTANCE.entityToDto(movimentacao);
+        movimentacaoDTO.setIdUsuario(movimentacao.getUsuario().getIdUsuario());
+        movimentacaoDTO.setIdProduto(movimentacao.getProduto().getIdProduto());
+        movimentacaoDTO.setIdCategoria(movimentacao.getCategoria().getIdCategoria());
 
         return movimentacaoDTO;
     }

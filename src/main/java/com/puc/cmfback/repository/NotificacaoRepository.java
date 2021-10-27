@@ -21,9 +21,4 @@ public interface NotificacaoRepository extends JpaRepository<Notificacao, Intege
     List<Notificacao> findAllByConta(Conta conta);
 
     List<Notificacao> findAllByUsuario(Usuario usuario);
-
-    @Modifying
-    @Transactional
-    @Query(value = "INSERT INTO Notificacao (data_lembrete, id_conta, id_usuario) VALUES (:dataLembrete, :idConta, :idUsuario)", nativeQuery = true)
-    void criarNotificacao(@Param("dataLembrete") LocalDate dataLembrete, @Param("idConta") Integer idConta, @Param("idUsuario") Integer idUsuario);
 }

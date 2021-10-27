@@ -6,7 +6,6 @@ import com.puc.cmfback.model.mapper.ProdutoMapper;
 import com.puc.cmfback.repository.ProdutoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,19 +25,11 @@ public class ProdutoService {
     private ProdutoRepository repository;
 
     public ProdutoDTO criarProduto(ProdutoDTO produtoDTO) {
-        try {
             validarNomeProdutoJaExistente(produtoDTO.getNome());
 
-            var produto = ProdutoMapper.INSTANCE.dtoToEntity(produtoDTO);
-
-            produto.setIdProduto(null);
-            repository.criarProduto(produto.getNome(), produto.getQuantidade());
-            produto = repository.findByNome(produto.getNome());
+            var produto = repository.save(ProdutoMapper.INSTANCE.dtoToEntity(produtoDTO));
 
             return ProdutoMapper.INSTANCE.entityToDto(produto);
-        } catch (Exception e) {
-            throw new NegocioException("Erro ao salvar produto", HttpStatus.BAD_REQUEST);
-        }
     }
 
     public List<ProdutoDTO> buscarTodos() {

@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -60,5 +62,14 @@ public class CategoriaService {
 
     public void deletarCategoriaPorId(Integer id) {
         repository.deleteById(id);
+    }
+
+    public List<CategoriaDTO> buscarTodosAsCategorias() {
+        var categoriaList = repository.findAll();
+
+        if (categoriaList.isEmpty())
+            throw new NegocioException("Nenhuma categoria encontrada", NOT_FOUND);
+
+        return categoriaList.stream().map(CategoriaMapper.INSTANCE::entityToDto).collect(toList());
     }
 }

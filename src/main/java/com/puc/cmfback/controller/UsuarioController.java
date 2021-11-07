@@ -42,9 +42,9 @@ public class UsuarioController {
     }
 
     @DeleteMapping(value = "/deletar/{email}")
-    public ResponseEntity.BodyBuilder deletarUsuarioPorId(@RequestParam String email) {
+    public ResponseEntity deletarUsuarioPorId(@RequestParam String email) {
         service.deletarUsuarioPorEmail(email);
-        return ResponseEntity.ok();
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @GetMapping(value = "/login")

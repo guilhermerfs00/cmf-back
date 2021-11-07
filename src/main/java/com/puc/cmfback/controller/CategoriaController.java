@@ -1,7 +1,6 @@
 package com.puc.cmfback.controller;
 
 import com.puc.cmfback.model.dto.CategoriaDTO;
-import com.puc.cmfback.model.dto.UsuarioDTO;
 import com.puc.cmfback.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,9 +36,9 @@ public class CategoriaController {
     }
 
     @DeleteMapping(value = "/deletar/{id}")
-    public ResponseEntity.BodyBuilder deletarCategoriaPorId(@RequestParam Integer id) {
+    public ResponseEntity deletarCategoriaPorId(@RequestParam Integer id) {
         service.deletarCategoriaPorId(id);
-        return ResponseEntity.ok();
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @GetMapping(value = "/buscar-todas")

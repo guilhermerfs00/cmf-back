@@ -36,7 +36,7 @@ public class NotificacaoController {
     }
 
     @DeleteMapping(value = "/deletar/{id}")
-    public ResponseEntity<Void> deletarNotificacoPorId(@RequestParam Integer id) {
+    public ResponseEntity deletarNotificacoPorId(@RequestParam Integer id) {
         service.deletarNotificacaoPorId(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

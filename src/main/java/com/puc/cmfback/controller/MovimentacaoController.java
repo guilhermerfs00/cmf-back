@@ -43,4 +43,16 @@ public class MovimentacaoController {
         var resposta = service.buscarMovimentacaoPorTipoOrdem(ordemEnum.toString());
         return ResponseEntity.status(HttpStatus.OK).body(resposta);
     }
+
+    @DeleteMapping(value = "/deletar/{id}")
+    public ResponseEntity<Void> deletarMovimentacaoPorId(@RequestParam Integer id) {
+        service.deletarProdutoPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @PutMapping(value = "/atualizar")
+    public ResponseEntity<MovimentacaoDTO> atualizarUsuario(@RequestBody MovimentacaoDTO movimentacaoDTO) {
+        var resposta = service.atualizarProduto(movimentacaoDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(resposta);
+    }
 }

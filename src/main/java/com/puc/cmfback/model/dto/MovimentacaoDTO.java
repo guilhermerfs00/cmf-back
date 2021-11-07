@@ -32,4 +32,5 @@ public class MovimentacaoDTO {
     @NotEmpty
     private Integer idCategoria;
 
+    private String tipoMovimentacao;
 }

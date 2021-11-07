@@ -17,8 +17,7 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.*;
 
 
 @Service
@@ -28,7 +27,7 @@ public class MovimentacaoService {
     public static final String NENHUMA_MOVIMENTACAO_ENCONTRADA = "Nenhuma movimentacao encontrada";
 
     @Autowired
-    private MovimentacaoRepository movimentacaoRepository;
+    private MovimentacaoRepository repository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -60,7 +59,8 @@ public class MovimentacaoService {
         movimentacao.setProduto(produto.get());
         movimentacao.setCategoria(categoria.get());
 
-        movimentacao = movimentacaoRepository.save(movimentacao);
+        movimentacao.setDataCriacao(LocalDate.now());
+        movimentacao = repository.save(movimentacao);
 
         movimentacaoDTO = MovimentacaoMapper.INSTANCE.entityToDto(movimentacao);
         movimentacaoDTO.setIdUsuario(movimentacao.getUsuario().getIdUsuario());
@@ -71,7 +71,7 @@ public class MovimentacaoService {
     }
 
     public List<MovimentacaoDTO> buscarMovimentacaoPorData(LocalDate dataInicial, LocalDate dataFinal) {
-        var movimentacoes = movimentacaoRepository.findAllByDataCriacaoBetween(dataInicial, dataFinal);
+        var movimentacoes = repository.findAllByDataCriacaoBetween(dataInicial, dataFinal);
 
         if (isNull(movimentacoes) || movimentacoes.isEmpty()) {
             throw new NegocioException(NENHUMA_MOVIMENTACAO_ENCONTRADA, NO_CONTENT);
@@ -81,7 +81,7 @@ public class MovimentacaoService {
     }
 
     public List<MovimentacaoDTO> buscarMovimentacaoPorTipoMovimentacao(String tipoMovimentacaoEnum) {
-        var movimentacoes = movimentacaoRepository.findAllByTipoMovimentacao(tipoMovimentacaoEnum);
+        var movimentacoes = repository.findAllByTipoMovimentacao(tipoMovimentacaoEnum);
 
         if (isNull(movimentacoes) || movimentacoes.isEmpty()) {
             throw new NegocioException(NENHUMA_MOVIMENTACAO_ENCONTRADA, NO_CONTENT);
@@ -90,7 +90,7 @@ public class MovimentacaoService {
     }
 
     public List<MovimentacaoDTO> buscarMovimentacaoPorTipoOrdem(String ordemEnum) {
-        var movimentacoes = movimentacaoRepository.findAllByOrdem(ordemEnum);
+        var movimentacoes = repository.findAllByOrdem(ordemEnum);
 
         if (isNull(movimentacoes) || movimentacoes.isEmpty()) {
             throw new NegocioException(NENHUMA_MOVIMENTACAO_ENCONTRADA, NO_CONTENT);
@@ -108,5 +108,44 @@ public class MovimentacaoService {
 
             return movimentacaoDTO;
         }).collect(toList());
+    }
+
+    public void deletarProdutoPorId(Integer id) {
+        repository.deleteById(id);
+    }
+
+    public MovimentacaoDTO atualizarProduto(MovimentacaoDTO movimentacaoDTO) {
+        try {
+            var usuario = usuarioRepository.findById(movimentacaoDTO.getIdUsuario());
+
+            if (!usuario.isPresent())
+                throw new NegocioException("Usuario não encontrado", NOT_FOUND);
+
+            var categoria = categoriaRepository.findById(movimentacaoDTO.getIdCategoria());
+
+            if (!categoria.isPresent())
+                throw new NegocioException("Categoria não encontrada", NOT_FOUND);
+
+            var produto = produtoRepository.findById(movimentacaoDTO.getIdProduto());
+
+            if (!produto.isPresent())
+                throw new NegocioException("Produto não encontrado", NOT_FOUND);
+
+            var movimentacao = MovimentacaoMapper.INSTANCE.dtoToEntity(movimentacaoDTO);
+            movimentacao.setUsuario(usuario.get());
+            movimentacao.setProduto(produto.get());
+            movimentacao.setCategoria(categoria.get());
+
+            movimentacao = repository.save(movimentacao);
+
+            movimentacaoDTO = MovimentacaoMapper.INSTANCE.entityToDto(movimentacao);
+            movimentacaoDTO.setIdUsuario(movimentacao.getUsuario().getIdUsuario());
+            movimentacaoDTO.setIdProduto(movimentacao.getProduto().getIdProduto());
+            movimentacaoDTO.setIdCategoria(movimentacao.getCategoria().getIdCategoria());
+
+            return movimentacaoDTO;
+        } catch (Exception e) {
+            throw new NegocioException("Erro ao atualizar produto", BAD_REQUEST);
+        }
     }
 }

@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,19 +29,16 @@ public class Movimentacao implements Serializable {
 
     private String ordem;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "id_produto")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Produto produto;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_usuario")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_categoria")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Categoria categoria;
 
     private LocalDate dataCriacao;

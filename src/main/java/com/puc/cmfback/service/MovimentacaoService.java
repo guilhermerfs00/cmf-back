@@ -3,6 +3,7 @@ package com.puc.cmfback.service;
 import com.puc.cmfback.exception.errors.NegocioException;
 import com.puc.cmfback.model.dto.MovimentacaoDTO;
 import com.puc.cmfback.model.entity.Movimentacao;
+import com.puc.cmfback.model.entity.Produto;
 import com.puc.cmfback.model.mapper.MovimentacaoMapper;
 import com.puc.cmfback.repository.CategoriaRepository;
 import com.puc.cmfback.repository.MovimentacaoRepository;
@@ -14,8 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.*;
 
@@ -41,6 +44,8 @@ public class MovimentacaoService {
     public MovimentacaoDTO criarMovimentacao(MovimentacaoDTO movimentacaoDTO) {
         var usuario = usuarioRepository.findById(movimentacaoDTO.getIdUsuario());
 
+        Optional<Produto> produto = Optional.ofNullable(Produto.builder().build());
+
         if (!usuario.isPresent())
             throw new NegocioException("Usuario não encontrado", NOT_FOUND);
 
@@ -49,14 +54,16 @@ public class MovimentacaoService {
         if (!categoria.isPresent())
             throw new NegocioException("Categoria não encontrada", NOT_FOUND);
 
-        var produto = produtoRepository.findById(movimentacaoDTO.getIdProduto());
+        if (nonNull(movimentacaoDTO.getIdProduto())) {
+            produto = produtoRepository.findById(movimentacaoDTO.getIdProduto());
 
-        if (!produto.isPresent())
-            throw new NegocioException("Produto não encontrado", NOT_FOUND);
+            if (!produto.isPresent())
+                throw new NegocioException("Produto não encontrado", NOT_FOUND);
+        }
 
         var movimentacao = MovimentacaoMapper.INSTANCE.dtoToEntity(movimentacaoDTO);
         movimentacao.setUsuario(usuario.get());
-        movimentacao.setProduto(produto.get());
+        movimentacao.setProduto(movimentacaoDTO.getIdProduto() != null ? produto.get() : null);
         movimentacao.setCategoria(categoria.get());
 
         movimentacao.setDataCriacao(LocalDate.now());
@@ -64,7 +71,7 @@ public class MovimentacaoService {
 
         movimentacaoDTO = MovimentacaoMapper.INSTANCE.entityToDto(movimentacao);
         movimentacaoDTO.setIdUsuario(movimentacao.getUsuario().getIdUsuario());
-        movimentacaoDTO.setIdProduto(movimentacao.getProduto().getIdProduto());
+        movimentacaoDTO.setIdProduto(movimentacaoDTO.getIdProduto() != null ? movimentacao.getProduto().getIdProduto() : null);
         movimentacaoDTO.setIdCategoria(movimentacao.getCategoria().getIdCategoria());
 
         return movimentacaoDTO;

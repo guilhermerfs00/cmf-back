@@ -107,11 +107,13 @@ public class MovimentacaoService {
     }
 
     private List<MovimentacaoDTO> buscarIdsTipoMovimentacao(List<Movimentacao> movimentacoes) {
+
         return movimentacoes.stream().map(movimentacao -> {
             var movimentacaoDTO = MovimentacaoMapper.INSTANCE.entityToDto(movimentacao);
 
-            movimentacaoDTO.setIdProduto(movimentacao.getProduto().getIdProduto());
+            movimentacaoDTO.setIdProduto(nonNull(movimentacao.getProduto()) ? movimentacao.getProduto().getIdProduto() : null);
             movimentacaoDTO.setIdUsuario(movimentacao.getUsuario().getIdUsuario());
+            movimentacaoDTO.setIdCategoria(movimentacao.getCategoria().getIdCategoria());
 
             return movimentacaoDTO;
         }).collect(toList());

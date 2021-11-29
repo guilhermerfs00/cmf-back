@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -33,4 +34,6 @@ public class MovimentacaoDTO {
     private Integer idCategoria;
 
     private String tipoMovimentacao;
+
+    private LocalDate dataCriacao;
 }
